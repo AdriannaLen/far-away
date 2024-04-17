@@ -8,10 +8,23 @@ const initialItems = [
 ];
 
 export default function App() {
+
+  const [ items, setItems ] = useState([]);
+
+  function handleAddItems(item) {
+
+    setItems((items) => [...items, item]);
+   }
+   
+   function handleDeleteItem(id) {
+
+    setItems(items => items.filter(item => item.id !== id) );
+
+   }
   return <div className="app">
     <Logo />
-    <Form />
-    <PackingList />
+    <Form onAddItems={handleAddItems}/>
+    <PackingList items = {items} onDeleteItem={handleDeleteItem}/>
     <Stats />
   </div>
 }
@@ -23,10 +36,12 @@ function Logo() {
 }
 
 
-function Form() {
+function Form({onAddItems}) {
 
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(1);
+
+
 
   function handleSubmit(e) {
 
@@ -38,35 +53,63 @@ function Form() {
     id: Date.now() };
     console.log(newItem);
 
+    onAddItems(newItem);
+
     setDescription ("");
     setQuantity (1);
 
   }
 
   return ( 
-  <div className="add-form" onSubmit={handleSubmit}>
+  <form className="add-form" onSubmit={handleSubmit}>
+
     <h3> What do you need for your trip ? </h3>
-    <select value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}>
-      {Array.from({length: 20}, (_, i) => i+1).map(num=>
+
+    <select 
+    value={quantity} 
+    onChange={(e) => setQuantity(Number(e.target.value))}>
+
+      {Array.from({length: 20}, (_, i) => i+1).map((num)=> (
+
     <option value={num} key={num}>
+
       {num}
-    </option>)}
+
+    </option>))}
+
     </select>
-    <input type= "text" placeholder="Item..." value={description}
+    <input 
+    type= "text" 
+    placeholder="Item..." 
+    value={description}
     onChange={(e) => setDescription(e.target.value)}/>
+
     <button>Add</button>
-  </div>
+  </form>
   );
 }
 
-function PackingList() {
+function PackingList({items, onDeleteItem}) {
   return (
   <div className="list">
   <ul>
-    {initialItems.map(item =>
-      <Item item={item} key={item.id}/>)}
+    {items.map((item =>
+      <Item item={item} onDeleteItem={onDeleteItem} key={item.id}/>))}
   </ul>
-  </div> )
+  </div> );
+}
+
+
+function Item ({item, onDeleteItem}) {
+
+  return (
+    <li>
+      <span style={item.packed ? { textDecoration: "line-through" } : {}}>
+        {item.quantity} {item.description}
+      </span>
+      <button onClick={ () => onDeleteItem(item.id)}>✖️</button>
+    </li>
+  );
 }
 
 function Stats() {
@@ -74,16 +117,4 @@ function Stats() {
     <em>You have X items on your list, and you already packed X (X%)</em>
   </footer>
   
-}
-
-function Item ({item}) {
-
-  return (
-    <li>
-      <span style={item.packed ? { textDecoration: "line-through" } : {}}>
-        {item.quantity} {item.description}
-      </span>
-      <button>✖️</button>
-    </li>
-  )
 }
