@@ -93,11 +93,18 @@ function Form({onAddItems}) {
   );
 }
 
-function PackingList({items, onDeleteItem, onToggleItem}) {
+function PackingList({items, onDeleteItem, onToggleItem}) 
+{
+const [ sortBy, setSortBy ] = useState('input')
+
+let sortedItems;
+
+if ( sortBy === "input") sortedItems = items;
+
   return (
   <div className="list">
   <ul>
-    {items.map((item =>
+    {sortedItems.map((item =>
       <Item item={item} 
       onDeleteItem={onDeleteItem} 
       key={item.id}
@@ -106,9 +113,9 @@ function PackingList({items, onDeleteItem, onToggleItem}) {
 
   <div className="actions">
     <select>
-      <option value="input">Sort by input order</option>
-      <option value="input">Sort by description</option>
-      <option value="input">Sort by packed status</option>
+      <option value={sortBy} onChange={(e) => setSortBy(e.target.value)}>Sort by input order</option>
+      <option value="descriptions">Sort by description</option>
+      <option value="packed">Sort by packed status</option>
     </select>
   </div>
   </div> );
