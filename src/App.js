@@ -25,10 +25,15 @@ export default function App() {
     )
    )}
 
+   function handleDeleteItems() {
+
+    setItems([]);
+   }
+
   return <div className="app">
     <Logo />
     <Form onAddItems={handleAddItems}/>
-    <PackingList items = {items} onDeleteItem={handleDeleteItem} onToggleItem={handleToggleItem}/>
+    <PackingList items = {items} onDeleteItem={handleDeleteItem} onToggleItem={handleToggleItem} onDeleteItems={handleDeleteItems}/>
     <Stats items = {items}/>
   </div>
 }
@@ -93,7 +98,7 @@ function Form({onAddItems}) {
   );
 }
 
-function PackingList({items, onDeleteItem, onToggleItem}) 
+function PackingList({items, onDeleteItem, onToggleItem, onDeleteItems}) 
 {
 const [ sortBy, setSortBy ] = useState('input')
 
@@ -122,6 +127,8 @@ if (sortBy === "packed") sortedItems = items.slice().sort((a,b) => Number(a.pack
       <option value="description">Sort by description</option>
       <option value="packed">Sort by packed status</option>
     </select>
+
+   <button onClick={onDeleteItems}>Clear the list</button>
   </div>
   </div> );
 }
