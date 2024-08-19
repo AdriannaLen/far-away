@@ -27,12 +27,12 @@ body {
 h1 {
   text-align: center;
   background-color: #edf2f7;
-  font-family: "Monoton", sans-serif;
+  font-family: "Quicksand", sans-serif;
   font-size: 8rem;
   text-transform: uppercase;
   font-weight: 400;
   word-spacing: 30px;
-  letter-spacing: -5px;
+  letter-spacing: 10px;
   padding: 2.4rem 0;
   color: #2d3748;
 }
